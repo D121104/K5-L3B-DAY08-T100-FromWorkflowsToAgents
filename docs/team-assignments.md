@@ -66,7 +66,7 @@ Các chi tiết chuẩn tắc nằm trong `specs/001-claim-shape-implementation/
 | Thành viên 2 | Hùng | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
 | Thành viên 3 | Nhân | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
 | Thành viên 4 | Hưng | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 5 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 5 | Quốc | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
 | Thành viên 6 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
 
 ## Truy vết yêu cầu theo người phụ trách

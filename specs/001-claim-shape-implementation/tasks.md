@@ -18,7 +18,7 @@ Mỗi công việc dùng định dạng `- [ ] Tnnn [P?] [USn?] ...`. Mô tả b
 
 **Mục đích**: Ghi lại quyền sở hữu cho sáu người, branch và ranh giới file trước khi bắt đầu.
 
-- [ ] T001 Yêu cầu: M-01, M-02, M-03, M-04, M-05, M-06, M-07, M-08, M-09, M-10, M-11, M-12, M-13, O-01. Phụ trách: Thành viên 1. Đầu ra: tạo bảng phân công sáu người, tên nhánh đề xuất, quyền sở hữu module/test/report và quy tắc giao tiếp/PR. Nghiệm thu: cả sáu vai trò có một luồng công việc chính; đường dẫn không chồng lấn khi triển khai song song; nêu rõ người sở hữu file dùng chung và các điểm bàn giao; có thể thay nhãn thành viên chưa rõ tên bằng tên thật. File: `docs/team-assignments.md`. Phụ thuộc: không.
+- [X] T001 Yêu cầu: M-01, M-02, M-03, M-04, M-05, M-06, M-07, M-08, M-09, M-10, M-11, M-12, M-13, O-01. Phụ trách: Thành viên 1. Đầu ra: tạo bảng phân công sáu người, tên nhánh đề xuất, quyền sở hữu module/test/report và quy tắc giao tiếp/PR. Nghiệm thu: cả sáu vai trò có một luồng công việc chính; đường dẫn không chồng lấn khi triển khai song song; nêu rõ người sở hữu file dùng chung và các điểm bàn giao; có thể thay nhãn thành viên chưa rõ tên bằng tên thật. File: `docs/team-assignments.md`. Phụ thuộc: không.
 
 ---
 
@@ -26,10 +26,12 @@ Mỗi công việc dùng định dạng `- [ ] Tnnn [P?] [USn?] ...`. Mô tả b
 
 **Mục đích**: Xác minh các cổng hiện có và cố định interface/quyền sở hữu file dùng chung. Phải hoàn thành các task này trước mọi user story.
 
-- [ ] T002 Yêu cầu: M-09. Phụ trách: Thành viên 5. Đầu ra: chạy `python -m lab8.smoke` và `python -m pytest -q` từ `src/`, gửi nguyên văn kết quả lệnh cho Thành viên 1 để ghi nhận mốc ban đầu. Nghiệm thu: smoke in `lab8.smoke pass`; pytest host kết thúc thành công (kết quả khởi đầu theo tài liệu là `52 passed, 248 deselected` trước khi thêm test); mọi sai lệch được báo cáo thay vì sửa file được bảo vệ. File: `src/README.md` (nguồn lệnh, không sửa), `docs/team-assignments.md` (Thành viên 1 điều phối ghi nhận baseline). Phụ thuộc: T001.
-- [ ] T003 Yêu cầu: M-01, M-02, M-03, M-04, M-05, M-06, M-07, M-08. Phụ trách: Thành viên 1. Đầu ra: ghi nhận thống nhất về hợp đồng và cổng phân quyền file dựa trên `contracts/run-claim.md`, `contracts/shape-integration.md`, `plan.md`. Nghiệm thu: cả sáu thành viên xác nhận trước khi làm song song rằng `run_claim`/`RunResult`, trạng thái và quy tắc trace, ranh giới host nhận toàn bộ quote, truyền lỗi crash, investigator chỉ đọc, nhánh riêng và đường dẫn shape/test không chồng lấn sẽ được giữ nguyên. File: `specs/001-claim-shape-implementation/contracts/run-claim.md`, `specs/001-claim-shape-implementation/contracts/shape-integration.md`, `docs/team-assignments.md`. Phụ thuộc: T001 và T002.
+- [X] T002 Yêu cầu: M-09. Phụ trách: Thành viên 5. Đầu ra: chạy `python -m lab8.smoke` và `python -m pytest -q` từ `src/`, gửi nguyên văn kết quả lệnh cho Thành viên 1 để ghi nhận baseline. Nghiệm thu: smoke in `lab8.smoke pass`; pytest host kết thúc thành công (kết quả khởi đầu theo tài liệu là `52 passed, 248 deselected` trước khi thêm test); mọi sai lệch được báo cáo thay vì sửa file được bảo vệ. File: `src/README.md` (nguồn lệnh, không sửa), `docs/team-assignments.md` (Thành viên 1 điều phối ghi nhận baseline). Phụ thuộc: T001.
+- [X] T003 Yêu cầu: M-01, M-02, M-03, M-04, M-05, M-06, M-07, M-08. Phụ trách: Thành viên 1. Đầu ra: ghi nhận thống nhất về hợp đồng và cổng phân quyền file dựa trên `contracts/run-claim.md`, `contracts/shape-integration.md`, `plan.md`. Nghiệm thu: cả sáu thành viên xác nhận trước khi làm song song rằng `run_claim`/`RunResult`, trạng thái và quy tắc trace, ranh giới host nhận toàn bộ quote, truyền lỗi crash, investigator chỉ đọc, nhánh riêng và đường dẫn shape/test không chồng lấn sẽ được giữ nguyên. File: `specs/001-claim-shape-implementation/contracts/run-claim.md`, `specs/001-claim-shape-implementation/contracts/shape-integration.md`, `docs/team-assignments.md`. Phụ thuộc: T001 và T002.
 
 **Mốc kiểm tra**: Không bắt đầu công việc triển khai shape trước khi baseline xanh và T003 ghi nhận xác nhận hợp đồng/quyền sở hữu file. Nếu baseline không xanh, dừng và báo sai lệch; không sửa file host/test được bảo vệ để ép test pass.
+
+**Trạng thái khi ghi nhận**: T002 được đánh dấu hoàn tất theo xác nhận của người dùng. Hợp đồng và ranh giới file được ghi trong `docs/team-assignments.md`; nhóm xác nhận đã thống nhất theo báo cáo của người dùng ngày 2026-11-17.
 
 ---
 

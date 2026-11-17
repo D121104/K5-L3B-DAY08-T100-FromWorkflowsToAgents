@@ -9,12 +9,12 @@ phụ trách nếu chưa thống nhất.
 
 | Vai trò | Thành viên | Trách nhiệm đề xuất | Task | File chính | Khối lượng/rủi ro dự kiến |
 |---|---|---|---|---|---|
-| Thành viên 1 | Chưa cung cấp tên | Trưởng tích hợp; chốt hợp đồng/quyền sở hữu file dùng chung; kiểm tra nộp bài cuối | T001, T003, T014 | `docs/team-assignments.md`, tài liệu hợp đồng (đánh giá/cố định, không sửa code), `src/lab8/check_submission.py` (chỉ chạy/đọc) | Trung bình; rủi ro điều phối. Không sở hữu shape. |
-| Thành viên 2 | Hùng | Shape A workflow | T004–T005 | `src/lab8/shapes/workflow.py`, `src/tests/test_workflow_shape.py` | Trung bình; luồng xác định, ranh giới kết quả/trace/refund. |
-| Thành viên 3 | Nhân | Shape B single-agent | T006–T007 | `src/lab8/shapes/single.py`, `src/tests/test_single_shape.py` | Trung bình-cao; hành vi ReAct/tool và giới hạn 8 bước. |
-| Thành viên 4 | Hưng | Shape C orchestrator/investigator | T008–T009 | `src/lab8/shapes/orchestrator.py`, `src/tests/test_orchestrator_shape.py` | Cao; handoff/quyền riêng tư và quyền của investigator. |
-| Thành viên 5 | Chưa cung cấp tên | Kiểm tra ban đầu, kiểm thử tổng hợp, an toàn crash, xác minh cuối | T002, T010–T011, T016 | Chỉ chạy lệnh trong `src/`; report sinh ra `src/reports/crash.json`; gửi bằng chứng cho Thành viên 1 cập nhật tài liệu này | Trung bình-cao; chịu trách nhiệm các cổng tích hợp. Không sửa test/host được bảo vệ. |
-| Thành viên 6 | Chưa cung cấp tên | Benchmark và báo cáo bằng chứng; chỉ làm chủ đề thưởng nếu nhóm chọn | T012–T013, T015 | `src/reports/benchmark.json` do công cụ sinh; `report/team/decision_adr.md`, `research_card.md`, `group_report.md`, báo cáo cá nhân; đường dẫn thưởng nếu chọn | Cao gần hạn nộp; ADR phụ thuộc kết quả có thể tái lập. |
+| Trưởng nhóm | Đào Đức Duy - 2A202603900 | Trưởng tích hợp; chốt hợp đồng/quyền sở hữu file dùng chung; kiểm tra nộp bài cuối | T001, T003, T014 | `docs/team-assignments.md`, tài liệu hợp đồng (đánh giá/cố định, không sửa code), `src/lab8/check_submission.py` (chỉ chạy/đọc) | Trung bình; rủi ro điều phối. Không sở hữu shape. |
+| Thành viên | Bùi Ngọc Hùng - 2A202603770 | Shape A workflow | T004–T005 | `src/lab8/shapes/workflow.py`, `src/tests/test_workflow_shape.py` | Trung bình; luồng xác định, ranh giới kết quả/trace/refund. |
+| Thành viên | Nguyễn Minh Nhân - 2A202603723 | Shape B single-agent | T006–T007 | `src/lab8/shapes/single.py`, test riêng chưa có trong lịch sử hiện có | Trung bình-cao; hành vi ReAct/tool và giới hạn 8 bước. |
+| Thành viên | Trần Cảnh Hưng - 2A202603759 | Shape C orchestrator/investigator | T008–T009 | `src/lab8/shapes/orchestrator.py`, `src/tests/test_orchestrator_shape.py` | Cao; handoff/quyền riêng tư và quyền của investigator. |
+| Thành viên | Nguyễn Vắn Quốc - 2A202603864 | Kiểm tra ban đầu, kiểm thử tổng hợp, an toàn crash, xác minh cuối | T002, T010–T011, T016 | Chỉ chạy lệnh trong `src/`; report sinh ra `src/reports/crash.json`; gửi bằng chứng cho Thành viên 1 cập nhật tài liệu này | Trung bình-cao; chịu trách nhiệm các cổng tích hợp. Không sửa test/host được bảo vệ. |
+| Trưởng nhóm (cùng người Thành viên 1) | Đào Đức Duy - 2A202603900 | Benchmark và báo cáo bằng chứng; chỉ làm chủ đề thưởng nếu nhóm chọn | T012–T013, T015 | `src/reports/benchmark.json` do công cụ sinh; các báo cáo team | Cao gần hạn nộp; ADR phụ thuộc kết quả có thể tái lập. |
 
 ## Quy ước nhánh và PR
 
@@ -62,12 +62,20 @@ Các chi tiết chuẩn tắc nằm trong `specs/001-claim-shape-implementation/
 
 | Thành viên | Tên trong nhóm | Trạng thái xác nhận contract/file ownership | Ngày |
 |---|---|---|---|
-| Thành viên 1 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 2 | Hùng | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 3 | Nhân | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 4 | Hưng | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 5 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 6 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 1 | Đào Đức Duy (2A202603900) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 2 | Bùi Ngọc Hùng (2A202603770) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 3 | Nguyễn Minh Nhân (2A202603723) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 4 | Trần Cảnh Hưng (2A202603759) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 5 | Nguyễn Vắn Quốc (2A202603864) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 6 | Đào Đức Duy (2A202603900, cùng người Thành viên 1) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+
+## Trạng thái phần benchmark/report/bonus (T012–T015)
+
+- **T010**: người dùng xác nhận các thành viên khác đã hoàn tất phần việc của họ; output console của host/student tests chưa được lưu trong workspace.
+- **T011**: `src/reports/crash.json` hiện có `passed: 20`, `crash_safety: 20/20`.
+- **T012**: `src/reports/benchmark.json` được sinh bằng `lab8.benchmark` cho 14 claim × 5 seed × 4 shape. Người dùng xác nhận đã chạy lại bằng `python -m` trong `.venv` theo hướng dẫn; phiên bản Python/output console lần chạy lại chưa được lưu trong workspace.
+- **T013**: TEAM và năm báo cáo cá nhân (năm người có tên duy nhất; Đào Đức Duy đảm nhiệm hai vai trò) đã được điền theo assignment và lịch sử Git. Các trường danh tính không có trong nguồn, AI-use cá nhân và output test chưa được xác nhận được đánh dấu rõ. Không có test cá nhân trong commit hiện có của Duy, Nhân hoặc Quốc; đây vẫn là thiếu sót theo checklist nộp bài, không được coi là đã đáp ứng tiêu chí mỗi thành viên có test. `f176005` là HEAD mã nguồn được benchmark; hash nộp cuối cần xác nhận sau khi commit report.
+- **T015**: nhóm đã chọn B7. Có test metamorphic và `report/team/bonus_report.md`; full pytest hiện pass 170 test (248 deselected), bonus tests pass 5/5 và checker ra 0 FAIL. `reports/hidden_grade.json` không có trong workspace nên chưa xác minh gate hidden ≥ 0.80/leak/bypass; chưa đủ căn cứ ghi nhận bonus đạt điều kiện tính điểm.
 
 ## Truy vết yêu cầu theo người phụ trách
 
@@ -90,7 +98,9 @@ tại đây. Không ghi secret, nhãn hidden hoặc dữ liệu kiểm thử đ�
 | Ngày | Task ID | Lệnh/kiểm tra | Vị trí kết quả/bằng chứng | Người phụ trách |
 |---|---|---|---|---|
 | 2026-11-17 | T002 | `python -m lab8.smoke`; `python -m pytest -q` từ `src/` | Người dùng xác nhận đã chạy hoàn tất T002 trong `.venv`; output/exit code chi tiết chưa được cung cấp trong phiên này | Thành viên 5 |
-| Chưa ghi | T010 | Toàn bộ host suite và student matrix | Chưa ghi | Thành viên 5 |
-| Chưa ghi | T011 | `python -m lab8.crash_test --count 20 --out reports/crash.json` | `src/reports/crash.json` | Thành viên 5 |
-| Chưa ghi | T012 | Benchmark bốn shape theo yêu cầu | `src/reports/benchmark.json` | Thành viên 6 |
-| Chưa ghi | T014 | `python -m lab8.check_submission` | Chưa ghi | Thành viên 1 |
+| 2026-11-17 | T010 | Toàn bộ host suite và student matrix | Người dùng xác nhận các thành viên hoàn tất; raw output chưa lưu trong workspace | Thành viên 5 |
+| 2026-11-17 | T011 | `python -m lab8.crash_test --count 20 --out reports/crash.json` | `src/reports/crash.json`: `passed=20`, `crash_safety=20/20` | Thành viên 5 |
+| 2026-11-17 | T012 | `python -m lab8.benchmark --shapes workflow,single,orchestrator,swarm --cases data/public_claims.jsonl --seeds 11,22,33,44,55 --out reports/benchmark.json` | `src/reports/benchmark.json`; 4 shape × 14 claim × 5 seed; representative run ID `R-workflow-C-001-s11`; người dùng xác nhận chạy lại trong `.venv`, chưa lưu Python version/console output | Thành viên 6 |
+| 2026-11-17 | T013 | Điền ADR, research card, group report từ benchmark | Các report đã có bản dựa trên số liệu public; TEAM/personal reports còn thiếu thông tin thành viên | Thành viên 6 |
+| 2026-11-17 | T014 | `python3 -m lab8.check_submission` từ `src/` | `1 FAIL`: bảng đóng góp `TEAM.md` trống; có `1 WARN` do report/docs chưa commit | Thành viên 1 |
+| 2026-11-17 | T015 | Kiểm tra đăng ký bonus topic | Chưa có topic B1–B7 nào được ghi nhận; không tạo bonus code/report | Thành viên 6 |

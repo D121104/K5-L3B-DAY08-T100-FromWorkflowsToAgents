@@ -7,14 +7,14 @@ phụ trách nếu chưa thống nhất.
 
 ## Bảng phân công
 
-| Thành viên | Trách nhiệm đề xuất | Task | File chính | Khối lượng/rủi ro dự kiến |
-|---|---|---|---|---|
-| Thành viên 1 | Trưởng tích hợp; chốt hợp đồng/quyền sở hữu file dùng chung; kiểm tra nộp bài cuối | T001, T003, T014 | `docs/team-assignments.md`, tài liệu hợp đồng (đánh giá/cố định, không sửa code), `src/lab8/check_submission.py` (chỉ chạy/đọc) | Trung bình; rủi ro điều phối. Không sở hữu shape. |
-| Thành viên 2 | Shape A workflow | T004–T005 | `src/lab8/shapes/workflow.py`, `src/tests/test_workflow_shape.py` | Trung bình; luồng xác định, ranh giới kết quả/trace/refund. |
-| Thành viên 3 | Shape B single-agent | T006–T007 | `src/lab8/shapes/single.py`, `src/tests/test_single_shape.py` | Trung bình-cao; hành vi ReAct/tool và giới hạn 8 bước. |
-| Thành viên 4 | Shape C orchestrator/investigator | T008–T009 | `src/lab8/shapes/orchestrator.py`, `src/tests/test_orchestrator_shape.py` | Cao; handoff/quyền riêng tư và quyền của investigator. |
-| Thành viên 5 | Kiểm tra ban đầu, kiểm thử tổng hợp, an toàn crash, xác minh cuối | T002, T010–T011, T016 | Chỉ chạy lệnh trong `src/`; report sinh ra `src/reports/crash.json`; gửi bằng chứng cho Thành viên 1 cập nhật tài liệu này | Trung bình-cao; chịu trách nhiệm các cổng tích hợp. Không sửa test/host được bảo vệ. |
-| Thành viên 6 | Benchmark và báo cáo bằng chứng; chỉ làm chủ đề thưởng nếu nhóm chọn | T012–T013, T015 | `src/reports/benchmark.json` do công cụ sinh; `report/team/decision_adr.md`, `research_card.md`, `group_report.md`, báo cáo cá nhân; đường dẫn thưởng nếu chọn | Cao gần hạn nộp; ADR phụ thuộc kết quả có thể tái lập. |
+| Vai trò | Thành viên | Trách nhiệm đề xuất | Task | File chính | Khối lượng/rủi ro dự kiến |
+|---|---|---|---|---|---|
+| Thành viên 1 | Chưa cung cấp tên | Trưởng tích hợp; chốt hợp đồng/quyền sở hữu file dùng chung; kiểm tra nộp bài cuối | T001, T003, T014 | `docs/team-assignments.md`, tài liệu hợp đồng (đánh giá/cố định, không sửa code), `src/lab8/check_submission.py` (chỉ chạy/đọc) | Trung bình; rủi ro điều phối. Không sở hữu shape. |
+| Thành viên 2 | Hùng | Shape A workflow | T004–T005 | `src/lab8/shapes/workflow.py`, `src/tests/test_workflow_shape.py` | Trung bình; luồng xác định, ranh giới kết quả/trace/refund. |
+| Thành viên 3 | Nhân | Shape B single-agent | T006–T007 | `src/lab8/shapes/single.py`, `src/tests/test_single_shape.py` | Trung bình-cao; hành vi ReAct/tool và giới hạn 8 bước. |
+| Thành viên 4 | Hưng | Shape C orchestrator/investigator | T008–T009 | `src/lab8/shapes/orchestrator.py`, `src/tests/test_orchestrator_shape.py` | Cao; handoff/quyền riêng tư và quyền của investigator. |
+| Thành viên 5 | Chưa cung cấp tên | Kiểm tra ban đầu, kiểm thử tổng hợp, an toàn crash, xác minh cuối | T002, T010–T011, T016 | Chỉ chạy lệnh trong `src/`; report sinh ra `src/reports/crash.json`; gửi bằng chứng cho Thành viên 1 cập nhật tài liệu này | Trung bình-cao; chịu trách nhiệm các cổng tích hợp. Không sửa test/host được bảo vệ. |
+| Thành viên 6 | Chưa cung cấp tên | Benchmark và báo cáo bằng chứng; chỉ làm chủ đề thưởng nếu nhóm chọn | T012–T013, T015 | `src/reports/benchmark.json` do công cụ sinh; `report/team/decision_adr.md`, `research_card.md`, `group_report.md`, báo cáo cá nhân; đường dẫn thưởng nếu chọn | Cao gần hạn nộp; ADR phụ thuộc kết quả có thể tái lập. |
 
 ## Quy ước nhánh và PR
 
@@ -44,6 +44,31 @@ chứng kiểm thử hoặc hướng dẫn xác minh có thể tái lập, và k
 - **Tệp phát sinh khi chạy**: dùng đường dẫn SQLite riêng cho từng test/run; không dùng chung DB đang chạy và không commit SQLite/trace.
 - **Sửa lỗi tích hợp**: chuyển thay đổi cho người phụ trách mô-đun và merge qua PR. Khi cần đổi hợp đồng dùng chung, tạm dừng phần việc phụ thuộc cho đến khi các thành viên liên quan thống nhất và hợp đồng cập nhật được đánh giá.
 
+## Cổng hợp đồng và xác nhận nhóm (T003)
+
+Trước khi bắt đầu triển khai song song, các thành viên xác nhận giữ nguyên các hợp đồng hiện có:
+
+- **Callable/result**: mỗi shape cung cấp `run_claim(claim_id, *, seed, store_path, crash_at=None) -> RunResult`; giữ nguyên `run_id`, các status cho phép, amount và budget như trong `specs/001-claim-shape-implementation/contracts/run-claim.md`.
+- **Refund/host**: code tính quote, gửi toàn bộ quote cùng `crash_at` đến host; host giữ quyền kiểm tra approval/cap, ghi refund/audit và bảo đảm idempotency. Không bắt `InjectedCrash` trong shape.
+- **Trace/privacy**: mỗi lần chạy bình thường có trace mới với run ID khớp và `events` là list; không ghi secret/PII vào trace, side file hoặc stdout.
+- **Orchestrator**: chỉ chuyển facts theo allowlist qua handoff; investigator chỉ có tool đọc, không nhận raw parent context/secret và không có quyền ghi.
+- **Quyền sở hữu**: Hùng sở hữu `workflow.py` và test riêng; Nhân sở hữu `single.py` và test riêng; Hưng sở hữu `orchestrator.py` và test riêng. Các module host/runtime/schema và test matrix hiện có là ranh giới dùng chung, không được sửa song song.
+- **Làm việc nhóm**: mỗi người dùng branch riêng; tích hợp qua PR review; không sửa module người khác nếu chưa thống nhất.
+
+Các chi tiết chuẩn tắc nằm trong `specs/001-claim-shape-implementation/contracts/run-claim.md`,
+`specs/001-claim-shape-implementation/contracts/shape-integration.md` và
+`specs/001-claim-shape-implementation/plan.md`. Bảng dưới đây ghi nhận xác nhận thực tế; không
+được xem việc tài liệu đã ghi contract là sự đồng ý thay cho thành viên.
+
+| Thành viên | Tên trong nhóm | Trạng thái xác nhận contract/file ownership | Ngày |
+|---|---|---|---|
+| Thành viên 1 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 2 | Hùng | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 3 | Nhân | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 4 | Hưng | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 5 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 6 | Chưa cung cấp | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+
 ## Truy vết yêu cầu theo người phụ trách
 
 | Mã yêu cầu | Người phụ trách chính | Người xác minh/tích hợp |
@@ -64,7 +89,7 @@ tại đây. Không ghi secret, nhãn hidden hoặc dữ liệu kiểm thử đ�
 
 | Ngày | Task ID | Lệnh/kiểm tra | Vị trí kết quả/bằng chứng | Người phụ trách |
 |---|---|---|---|---|
-| Chưa ghi | T002 | `python -m lab8.smoke`; `python -m pytest -q` từ `src/` | Chưa ghi | Thành viên 5 |
+| 2026-11-17 | T002 | `python -m lab8.smoke`; `python -m pytest -q` từ `src/` | Người dùng xác nhận đã chạy hoàn tất T002 trong `.venv`; output/exit code chi tiết chưa được cung cấp trong phiên này | Thành viên 5 |
 | Chưa ghi | T010 | Toàn bộ host suite và student matrix | Chưa ghi | Thành viên 5 |
 | Chưa ghi | T011 | `python -m lab8.crash_test --count 20 --out reports/crash.json` | `src/reports/crash.json` | Thành viên 5 |
 | Chưa ghi | T012 | Benchmark bốn shape theo yêu cầu | `src/reports/benchmark.json` | Thành viên 6 |

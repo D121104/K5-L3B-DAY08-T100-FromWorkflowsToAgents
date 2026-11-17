@@ -13,7 +13,7 @@ phụ trách nếu chưa thống nhất.
 | Thành viên | Bùi Ngọc Hùng - 2A202603770 | Shape A workflow | T004–T005 | `src/lab8/shapes/workflow.py`, `src/tests/test_workflow_shape.py` | Trung bình; luồng xác định, ranh giới kết quả/trace/refund. |
 | Thành viên | Nguyễn Minh Nhân - 2A202603723 | Shape B single-agent | T006–T007 | `src/lab8/shapes/single.py`, test riêng chưa có trong lịch sử hiện có | Trung bình-cao; hành vi ReAct/tool và giới hạn 8 bước. |
 | Thành viên | Trần Cảnh Hưng - 2A202603759 | Shape C orchestrator/investigator | T008–T009 | `src/lab8/shapes/orchestrator.py`, `src/tests/test_orchestrator_shape.py` | Cao; handoff/quyền riêng tư và quyền của investigator. |
-| Thành viên | Nguyễn Vắn Quốc - 2A202603864 | Kiểm tra ban đầu, kiểm thử tổng hợp, an toàn crash, xác minh cuối | T002, T010–T011, T016 | Chỉ chạy lệnh trong `src/`; report sinh ra `src/reports/crash.json`; gửi bằng chứng cho Thành viên 1 cập nhật tài liệu này | Trung bình-cao; chịu trách nhiệm các cổng tích hợp. Không sửa test/host được bảo vệ. |
+| Thành viên | Nguyễn Văn Quốc - 2A202603864 | Kiểm tra ban đầu, kiểm thử tích hợp/an toàn crash, xác minh cuối | T002, T010–T011, T016 | `src/reports/crash.json`, `src/tests/test_integration_safety.py`; báo cáo ghi nhận test tích hợp trên các shape và bằng chứng T010/T011 | Trung bình-cao; chịu trách nhiệm các cổng tích hợp. Không sửa host hoặc test matrix được bảo vệ. |
 | Trưởng nhóm (cùng người Thành viên 1) | Đào Đức Duy - 2A202603900 | Benchmark và báo cáo bằng chứng; chỉ làm chủ đề thưởng nếu nhóm chọn | T012–T013, T015 | `src/reports/benchmark.json` do công cụ sinh; các báo cáo team | Cao gần hạn nộp; ADR phụ thuộc kết quả có thể tái lập. |
 
 ## Quy ước nhánh và PR
@@ -60,22 +60,22 @@ Các chi tiết chuẩn tắc nằm trong `specs/001-claim-shape-implementation/
 `specs/001-claim-shape-implementation/plan.md`. Bảng dưới đây ghi nhận xác nhận thực tế; không
 được xem việc tài liệu đã ghi contract là sự đồng ý thay cho thành viên.
 
-| Thành viên | Tên trong nhóm | Trạng thái xác nhận contract/file ownership | Ngày |
-|---|---|---|---|
-| Thành viên 1 | Đào Đức Duy (2A202603900) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 2 | Bùi Ngọc Hùng (2A202603770) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 3 | Nguyễn Minh Nhân (2A202603723) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 4 | Trần Cảnh Hưng (2A202603759) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 5 | Nguyễn Vắn Quốc (2A202603864) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
-| Thành viên 6 | Đào Đức Duy (2A202603900, cùng người Thành viên 1) | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên | Họ tên | MSSV | Trạng thái xác nhận contract/file ownership | Ngày |
+|---|---|---|---|---|
+| Thành viên 1 | Đào Đức Duy | 2A202603900 | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 2 | Bùi Ngọc Hùng | 2A202603770 | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 3 | Nguyễn Minh Nhân | 2A202603723 | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 4 | Trần Cảnh Hưng | 2A202603759 | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 5 | Nguyễn Văn Quốc | 2A202603864 | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
+| Thành viên 6 | Đào Đức Duy (cùng người Thành viên 1) | 2A202603900 | Đã thống nhất theo xác nhận của người dùng cho cả nhóm | 2026-11-17 |
 
 ## Trạng thái phần benchmark/report/bonus (T012–T015)
 
 - **T010**: người dùng xác nhận các thành viên khác đã hoàn tất phần việc của họ; output console của host/student tests chưa được lưu trong workspace.
 - **T011**: `src/reports/crash.json` hiện có `passed: 20`, `crash_safety: 20/20`.
 - **T012**: `src/reports/benchmark.json` được sinh bằng `lab8.benchmark` cho 14 claim × 5 seed × 4 shape. Người dùng xác nhận đã chạy lại bằng `python -m` trong `.venv` theo hướng dẫn; phiên bản Python/output console lần chạy lại chưa được lưu trong workspace.
-- **T013**: TEAM và năm báo cáo cá nhân (năm người có tên duy nhất; Đào Đức Duy đảm nhiệm hai vai trò) đã được điền theo assignment và lịch sử Git. Các trường danh tính không có trong nguồn, AI-use cá nhân và output test chưa được xác nhận được đánh dấu rõ. Không có test cá nhân trong commit hiện có của Duy, Nhân hoặc Quốc; đây vẫn là thiếu sót theo checklist nộp bài, không được coi là đã đáp ứng tiêu chí mỗi thành viên có test. `f176005` là HEAD mã nguồn được benchmark; hash nộp cuối cần xác nhận sau khi commit report.
-- **T015**: nhóm đã chọn B7. Có test metamorphic và `report/team/bonus_report.md`; full pytest hiện pass 170 test (248 deselected), bonus tests pass 5/5 và checker ra 0 FAIL. `reports/hidden_grade.json` không có trong workspace nên chưa xác minh gate hidden ≥ 0.80/leak/bypass; chưa đủ căn cứ ghi nhận bonus đạt điều kiện tính điểm.
+- **T013**: TEAM và năm báo cáo cá nhân (năm người có tên duy nhất; Đào Đức Duy đảm nhiệm hai vai trò) đã được điền theo assignment và lịch sử Git. Test cá nhân của Duy được thêm trong commit B7 `aab41c1`; báo cáo của Quốc ghi nhận test tích hợp `88b6ba3`; chưa tìm thấy test file/commit riêng của Nhân trong lịch sử đã kiểm tra. Các trường AI-use cá nhân và output test chưa được xác nhận được đánh dấu rõ. `f176005` là HEAD mã nguồn được benchmark; hash nộp cuối cần xác nhận sau khi commit report.
+- **T015**: nhóm đã chọn B7. Bonus tests pass 5/5; student matrix pass 248; full pytest pass 179 (248 deselected); checker 0 FAIL/1 WARN. Hidden pack đã được cung cấp dưới `src/eval/` và chạy self-check aggregate: workflow 200 trial, trace 200/200 hợp lệ, 0 CANARY leak, 0/45 trial được resolved với approval không hợp lệ; crash 20/20. Do hidden claims không có nhãn expected và grader giảng viên/`hidden_grade.json` chưa được cung cấp, hidden pass rate ≥ 0.80 chưa tính được. T015 chưa đủ điều kiện đóng.
 
 ## Truy vết yêu cầu theo người phụ trách
 

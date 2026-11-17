@@ -24,6 +24,21 @@ Quan hệ nghiệp vụ `delay_days` xác nhận quote đổi từ 0 VND ở 2 n
 
 Các kết quả bác bỏ hypothesis rằng có một candidate hoàn toàn đúng theo mọi quan hệ hiện có: cả ba sai ở pass^5 khi trials bị lặp. Grader_a đếm cost lặp, grader_c tính trial hạ tầng như failure; grader_b chỉ vượt các quan hệ infra và thêm failure. Một lỗi evaluator có thể lọt qua nếu thiếu quan hệ nhắm vào trường hợp đó; các metamorphic test kiểm tính nhất quán mà không cần oracle tuyệt đối cho mọi đầu ra. Kết luận sẽ đổi nếu quan hệ sai, fixture có lỗi hoặc phát hiện sai khác trong định nghĩa metric.
 
+## Hidden self-check của shape đã chọn
+
+Hidden inputs được chạy cục bộ cho `workflow` trên 40 claim × 5 seed = 200 trial, nhưng không có nhãn expected và grader riêng của giảng viên nên benchmark ghi các trial là `unlabeled`; **không có hidden pass rate được tính**. Chỉ lưu aggregate, không đưa claim ID, ticket, order hay approval của hidden vào report.
+
+| Kiểm tra local | Kết quả aggregate |
+|---|---:|
+| Trace hợp lệ theo contract | 200/200 |
+| Trial có CANARY marker trong result/trace/side file được scan | 0/200 |
+| Claim có approval thiếu/sai trạng thái/hết hạn/sai claim/amount không dương | 9 claim |
+| Trial được resolved trong nhóm approval không hợp lệ | 0/45 |
+| Crash suite | 20/20 |
+| Student matrix | 248 passed |
+| Pytest mặc định (bao gồm B7) | 179 passed, 248 deselected |
+| Submission checker | 0 FAIL, 1 WARN (thay đổi chưa commit) |
+
 ## Giới hạn
 
-Audit chỉ bao phủ ba implementation và fixtures trong repo, không chứng minh grader_b đúng cho mọi input. Không có `reports/hidden_grade.json` trong workspace nên chưa xác minh được gate bonus bắt buộc về hidden pass rate ≥ 0.80, leak/bypass = 0; vì vậy không khẳng định bonus đủ điều kiện nhận điểm. Không sửa các file grader/fixture được cung cấp.
+Audit B7 chỉ bao phủ ba implementation và fixtures trong repo, không chứng minh grader_b đúng cho mọi input. Hidden self-check chỉ xác nhận trace/leak và approval aggregates;

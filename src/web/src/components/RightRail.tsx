@@ -1,7 +1,6 @@
 import type { Claim, NodeRunState, RunOutcome, ShapeId, StepEvent } from '../types'
-import { EventLog } from './EventLog'
-import { NodeInspector } from './NodeInspector'
 import { ResultPanel } from './ResultPanel'
+import { StepJournal } from './StepJournal'
 
 interface Props {
   collapsed: boolean
@@ -12,6 +11,7 @@ interface Props {
   selectedNodeId: string | null
   nodeStates: Record<string, NodeRunState>
   events: StepEvent[]
+  onSelectNode: (id: string | null) => void
 }
 
 export function RightRail({
@@ -19,10 +19,9 @@ export function RightRail({
   onToggle,
   claim,
   outcome,
-  shape,
   selectedNodeId,
-  nodeStates,
   events,
+  onSelectNode,
 }: Props) {
   return (
     <aside className={`rail rail-right ${collapsed ? 'is-collapsed' : ''}`}>
@@ -37,15 +36,13 @@ export function RightRail({
       </button>
 
       <div className="rail-body">
-        <div className="right-stack">
-          <ResultPanel claim={claim} outcome={outcome} />
-          <NodeInspector
-            shape={shape}
-            nodeId={selectedNodeId}
-            nodeStates={nodeStates}
+        <div className="right-stack right-stack--journal">
+          <ResultPanel claim={claim} outcome={outcome} compact />
+          <StepJournal
             events={events}
+            activeNodeId={selectedNodeId}
+            onSelect={(id) => onSelectNode(id)}
           />
-          <EventLog events={events} />
         </div>
       </div>
     </aside>

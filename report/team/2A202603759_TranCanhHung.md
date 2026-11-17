@@ -4,7 +4,7 @@
 
 - Họ tên: Trần Cảnh Hưng
 - MSSV: 2A202603759
-- Email: hungtch.work@gmail.com
+- Email: 26ai.hungtc@vinuni.edu.vn
 - GitHub: danialtranz
 - Nhánh chính: `member-04/orchestrator`
 

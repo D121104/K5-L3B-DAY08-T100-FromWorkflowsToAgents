@@ -4,7 +4,7 @@
 
 - Họ tên: Nguyễn Văn Quốc
 - MSSV: 2A202603864
-- Email:
+- Email: 26ai.quocnc@viununi.edu.vn
 - GitHub: missher03
 
 ## 2. Phần việc phụ trách

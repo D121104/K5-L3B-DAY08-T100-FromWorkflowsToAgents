@@ -113,7 +113,7 @@ Mỗi công việc dùng định dạng `- [ ] Tnnn [P?] [USn?] ...`. Mô tả b
 
 **Kiểm thử độc lập**: Chủ đề được chọn có code/test/report/bằng chứng bắt buộc; kiểm thử nền tảng vẫn xanh; thỏa tất cả điều kiện must-pass và hidden pass rate `>= 0.80`.
 
-- [X] T015 [US5] Phụ trách: Thành viên 6. Yêu cầu: O-01. Đầu ra: chỉ khi nhóm chọn một chủ đề B1–B7 thì ghi nhận lựa chọn và hoàn thành phần triển khai/bằng chứng theo `docs/bonus_topics.md` và `RUBRIC.md`; nếu không chọn thì đánh dấu không thực hiện và không bắt đầu viết bonus code. Nghiệm thu: chưa có chủ đề B1–B7 nào được ghi nhận là đã chọn; bonus không được triển khai hoặc tính điểm trong đợt này. Nếu nhóm chọn về sau, mở lại task và áp dụng các điều kiện bonus trong rubric. File: `docs/team-assignments.md`. Phụ thuộc: không cần T014 nếu đánh dấu không chọn; nếu chọn topic thì phải đợi T014 và xác minh các cổng bonus.
+- [ ] T015 [US5] Phụ trách: Thành viên 6. Yêu cầu: O-01. Đầu ra: nhóm đã chọn B7; tạo kiểm thử metamorphic, báo cáo kết quả và report bonus theo `docs/bonus_topics.md`. Nghiệm thu: `src/tests/test_bonus_grader_audit.py` pass; report JSON do test sinh và `report/team/bonus_report.md` có phân tích candidate; phải qua các gate bắt buộc trước khi bonus được tính. File: `src/tests/test_bonus_grader_audit.py`, `src/reports/bonus_grader_audit.json`, `report/team/bonus_report.md`. Phụ thuộc: T014 và xác minh gate bonus.
 
 ---
 

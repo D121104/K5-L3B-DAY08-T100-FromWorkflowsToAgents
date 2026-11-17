@@ -75,7 +75,7 @@ Các chi tiết chuẩn tắc nằm trong `specs/001-claim-shape-implementation/
 - **T011**: `src/reports/crash.json` hiện có `passed: 20`, `crash_safety: 20/20`.
 - **T012**: `src/reports/benchmark.json` được sinh bằng `lab8.benchmark` cho 14 claim × 5 seed × 4 shape. Người dùng xác nhận đã chạy lại bằng `python -m` trong `.venv` theo hướng dẫn; phiên bản Python/output console lần chạy lại chưa được lưu trong workspace.
 - **T013**: TEAM và năm báo cáo cá nhân (năm người có tên duy nhất; Đào Đức Duy đảm nhiệm hai vai trò) đã được điền theo assignment và lịch sử Git. Các trường danh tính không có trong nguồn, AI-use cá nhân và output test chưa được xác nhận được đánh dấu rõ. Không có test cá nhân trong commit hiện có của Duy, Nhân hoặc Quốc; đây vẫn là thiếu sót theo checklist nộp bài, không được coi là đã đáp ứng tiêu chí mỗi thành viên có test. `f176005` là HEAD mã nguồn được benchmark; hash nộp cuối cần xác nhận sau khi commit report.
-- **T015**: hiện chưa ghi nhận nhóm chọn topic B1–B7; không tạo bonus code/report. Nếu nhóm chọn topic sau này, mở lại task.
+- **T015**: nhóm đã chọn B7. Có test metamorphic và `report/team/bonus_report.md`; full pytest hiện pass 170 test (248 deselected), bonus tests pass 5/5 và checker ra 0 FAIL. `reports/hidden_grade.json` không có trong workspace nên chưa xác minh gate hidden ≥ 0.80/leak/bypass; chưa đủ căn cứ ghi nhận bonus đạt điều kiện tính điểm.
 
 ## Truy vết yêu cầu theo người phụ trách
 

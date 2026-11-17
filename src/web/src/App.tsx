@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { checkHealth, fetchClaims, runLive } from './api/client'
 import { ControlPanel } from './components/ControlPanel'
 import { FlowCanvas } from './components/FlowCanvas'
 import {
@@ -8,15 +9,19 @@ import {
   IconPanelRight,
 } from './components/Icons'
 import { RightRail } from './components/RightRail'
-import { CLAIMS } from './data/claims'
-import { buildSimulation, type SimStep } from './shapes/simulate'
-import type { NodeRunState, RunOutcome, RunnerMode, ShapeId, StepEvent } from './types'
+import { CLAIMS as FALLBACK_CLAIMS } from './data/claims'
+import { buildLivePlayback } from './shapes/fromTrace'
+import type { SimStep } from './shapes/simulate'
+import type { Claim, NodeRunState, RunOutcome, RunnerMode, ShapeId, StepEvent } from './types'
 import './App.css'
 
 export default function App() {
   const [shape, setShape] = useState<ShapeId>('workflow')
   const [claimId, setClaimId] = useState('C-001')
   const [seed, setSeed] = useState(11)
+  const [claims, setClaims] = useState<Claim[]>(FALLBACK_CLAIMS)
+  const [apiOnline, setApiOnline] = useState(false)
+  const [apiError, setApiError] = useState<string | null>(null)
   const [mode, setMode] = useState<RunnerMode>('idle')
   const [nodeStates, setNodeStates] = useState<Record<string, NodeRunState>>({})
   const [activeEdgeIds, setActiveEdgeIds] = useState<string[]>([])
@@ -40,8 +45,8 @@ export default function App() {
   const mountedRef = useRef(true)
 
   const claim = useMemo(
-    () => CLAIMS.find((c) => c.claim_id === claimId) ?? CLAIMS[0],
-    [claimId],
+    () => claims.find((c) => c.claim_id === claimId) ?? claims[0] ?? FALLBACK_CLAIMS[0],
+    [claims, claimId],
   )
 
   useEffect(() => {
@@ -51,6 +56,46 @@ export default function App() {
       runIdRef.current += 1
       stepResolveRef.current?.()
     }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    const boot = async () => {
+      const ok = await checkHealth()
+      if (cancelled) return
+      setApiOnline(ok)
+      if (!ok) {
+        setApiError('Không kết nối được lab8.web_api — chạy: python -m lab8.web_api')
+        return
+      }
+      try {
+        const data = await fetchClaims()
+        if (cancelled) return
+        setClaims(data.claims)
+        setApiError(null)
+        if (!data.claims.some((c) => c.claim_id === claimId) && data.claims[0]) {
+          setClaimId(data.claims[0].claim_id)
+        }
+      } catch (err) {
+        if (!cancelled) setApiError(err instanceof Error ? err.message : String(err))
+      }
+    }
+    void boot()
+    const timer = window.setInterval(() => {
+      void checkHealth().then((ok) => {
+        if (!cancelled) {
+          setApiOnline(ok)
+          if (!ok) {
+            setApiError('Không kết nối được lab8.web_api — chạy: python -m lab8.web_api')
+          }
+        }
+      })
+    }, 5000)
+    return () => {
+      cancelled = true
+      window.clearInterval(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- boot once on mount
   }, [])
 
   useEffect(() => {
@@ -145,12 +190,25 @@ export default function App() {
       loop()
     })
 
-  const applyStep = (step: SimStep) => {
+  const applyStep = (step: SimStep, stepIndex: number) => {
     const states = { ...statesRef.current }
+    const eventId = `${step.nodeId}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
+
     if (step.state === 'skipped') {
       states[step.nodeId] = 'skipped'
       statesRef.current = states
       setNodeStates(states)
+      setEvents((prev) => [
+        ...prev,
+        {
+          id: eventId,
+          at: Date.now(),
+          ...step.event,
+          state: 'skipped',
+          stepIndex,
+          label: step.nodeId,
+        },
+      ])
       return
     }
 
@@ -163,9 +221,12 @@ export default function App() {
     setEvents((prev) => [
       ...prev,
       {
-        id: `${step.nodeId}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        id: eventId,
         at: Date.now(),
         ...step.event,
+        state: 'running',
+        stepIndex,
+        label: step.nodeId,
       },
     ])
   }
@@ -174,6 +235,16 @@ export default function App() {
     const states = { ...statesRef.current, [step.nodeId]: step.state }
     statesRef.current = states
     setNodeStates(states)
+    setEvents((prev) => {
+      const next = [...prev]
+      for (let i = next.length - 1; i >= 0; i -= 1) {
+        if (next[i].nodeId === step.nodeId && next[i].state === 'running') {
+          next[i] = { ...next[i], state: step.state, at: Date.now() }
+          break
+        }
+      }
+      return next
+    })
   }
 
   const finishRun = (runId: number) => {
@@ -202,7 +273,8 @@ export default function App() {
     while (indexRef.current < steps.length) {
       if (runId !== runIdRef.current || !mountedRef.current) return
       const step = steps[indexRef.current]
-      applyStep(step)
+      const stepNo = indexRef.current + 1
+      applyStep(step, stepNo)
 
       if (step.state !== 'skipped') {
         await waitGate(runId, step.delayMs ?? 560)
@@ -223,20 +295,52 @@ export default function App() {
     finishRun(runId)
   }
 
+  const prepareLivePlayback = async () => {
+    setApiError(null)
+    const live = await runLive({
+      shape,
+      claim_id: claim.claim_id,
+      seed,
+    })
+    if (live.claim) {
+      setClaims((prev) => {
+        const others = prev.filter((c) => c.claim_id !== live.claim.claim_id)
+        return [...others, live.claim]
+      })
+    }
+    const playback = buildLivePlayback(live)
+    stepsRef.current = playback.steps
+    outcomeRef.current = playback.outcome
+    indexRef.current = 0
+    setProgress({ current: 0, total: playback.steps.length })
+    return live
+  }
+
   const startRun = async () => {
+    if (!apiOnline) {
+      setApiError('API offline — chạy python -m lab8.web_api trong thư mục src/')
+      return
+    }
+
     runIdRef.current += 1
     stepResolveRef.current?.()
     stepResolveRef.current = null
     pausedRef.current = false
     clearVisual()
+    setMode('running')
+    setApiError('Đang gọi backend…')
 
     const runId = runIdRef.current
-    const sim = buildSimulation(shape, claim, seed)
-    stepsRef.current = sim.steps
-    outcomeRef.current = sim.outcome
-    indexRef.current = 0
-    setProgress({ current: 0, total: sim.steps.length })
-    await playFrom(runId)
+    try {
+      await prepareLivePlayback()
+      setApiError(null)
+      await playFrom(runId)
+    } catch (err) {
+      if (runId !== runIdRef.current) return
+      setMode('idle')
+      setLively(false)
+      setApiError(err instanceof Error ? err.message : String(err))
+    }
   }
 
   const onPause = () => {
@@ -252,19 +356,27 @@ export default function App() {
 
   const onStep = async () => {
     if (mode === 'running' || mode === 'done') return
+    if (!apiOnline) {
+      setApiError('API offline — chạy python -m lab8.web_api trong thư mục src/')
+      return
+    }
 
     if (mode === 'idle' || stepsRef.current.length === 0) {
       hardStop()
       clearVisual()
       const runId = runIdRef.current + 1
       runIdRef.current = runId
-      const sim = buildSimulation(shape, claim, seed)
-      stepsRef.current = sim.steps
-      outcomeRef.current = sim.outcome
-      indexRef.current = 0
-      setProgress({ current: 0, total: sim.steps.length })
-      pausedRef.current = true
-      setMode('paused')
+      try {
+        setApiError('Đang gọi backend…')
+        await prepareLivePlayback()
+        setApiError(null)
+        pausedRef.current = true
+        setMode('paused')
+      } catch (err) {
+        setMode('idle')
+        setApiError(err instanceof Error ? err.message : String(err))
+        return
+      }
     }
 
     const runId = runIdRef.current
@@ -274,8 +386,9 @@ export default function App() {
     }
 
     const step = stepsRef.current[indexRef.current]
+    const stepNo = indexRef.current + 1
     setLively(true)
-    applyStep(step)
+    applyStep(step, stepNo)
     if (step.state !== 'skipped') {
       await waitGate(runId, step.delayMs ?? 320)
       if (runId !== runIdRef.current) return
@@ -306,7 +419,7 @@ export default function App() {
         return
       }
     } catch {
-      // Fallback CSS fullscreen if browser blocks Fullscreen API
+      // Fallback CSS fullscreen
     }
     setCanvasFullscreen((v) => !v)
   }
@@ -329,6 +442,9 @@ export default function App() {
         mode={mode}
         progress={progress}
         claim={claim}
+        claims={claims}
+        apiOnline={apiOnline}
+        apiError={apiError}
         collapsed={leftCollapsed}
         onToggle={() => setLeftCollapsed((v) => !v)}
         onShapeChange={handleShapeChange}
@@ -360,6 +476,7 @@ export default function App() {
               <strong>{shape}</strong>
               <span>
                 {claim.claim_id} · seed {seed} · {mode}
+                {apiOnline ? ' · live' : ' · offline'}
               </span>
             </div>
           </div>
@@ -412,6 +529,7 @@ export default function App() {
         selectedNodeId={selectedNodeId}
         nodeStates={nodeStates}
         events={events}
+        onSelectNode={setSelectedNodeId}
       />
     </div>
   )

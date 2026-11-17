@@ -36,6 +36,10 @@ export interface StepEvent {
   kind: 'start' | 'info' | 'warn' | 'error' | 'done'
   message: string
   detail?: string
+  /** Trạng thái bước trên canvas khi ghi / khi commit. */
+  state?: NodeRunState
+  stepIndex?: number
+  label?: string
 }
 
 export interface RunOutcome {

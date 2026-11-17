@@ -1,23 +1,37 @@
 # Claim Flow Studio
 
-React + Vite + `@xyflow/react`, design theo skill **high-end-visual-design** (Soft Structuralism).
+React + Vite + `@xyflow/react`, nối **backend Python thật** (`lab8.run_claim` qua `lab8.web_api`).
 
-## Chạy
+## Chạy (2 process)
 
 ```bash
+# Terminal 1 — API (thư mục src/)
+cd src
+python -m lab8.web_api
+# http://127.0.0.1:8765
+
+# Terminal 2 — FE
 cd src/web
 npm install
 npm run dev
+# http://localhost:5173  (proxy /api → :8765)
 ```
 
-Mở `http://localhost:5173` rồi **Ctrl+Shift+R**.
+Hard refresh: `Ctrl+Shift+R`. Badge **LIVE** = API online.
 
-## Layout
+## API
 
-- Canvas **trắng sáng** chiếm trung tâm
-- Panel trái / phải: nút trên chrome, hoặc phím `[` / `]`
-- Canvas fullscreen: nút expand (hoặc Fullscreen API)
+| Method | Path | Mô tả |
+| --- | --- | --- |
+| GET | `/api/health` | Health |
+| GET | `/api/claims` | Public claims (đã bỏ secret) |
+| GET | `/api/shapes` | Danh sách shape + seed |
+| POST | `/api/run` | `{ shape, claim_id, seed }` → `RunResult` + trace |
 
-## Controls
+Mỗi lần run tạo SQLite tạm mới rồi gọi `run_shape` thật. Canvas replay theo **trace events** từ backend.
 
-Run / Pause / Resume / Step / Reset · click node → inspector · badge Simulation = chưa gọi Python backend.
+## UI
+
+- Thu panel: `[` / `]` hoặc nút chrome
+- Fullscreen canvas: nút expand
+- Run live / Pause / Step / Reset

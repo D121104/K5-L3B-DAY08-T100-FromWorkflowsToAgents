@@ -1,4 +1,4 @@
-import { CLAIMS, SHAPE_META } from '../data/claims'
+import { SHAPE_META } from '../data/claims'
 import type { Claim, RunnerMode, ShapeId } from '../types'
 import { IconPause, IconPlay, IconReset, IconStep } from './Icons'
 
@@ -9,6 +9,9 @@ interface Props {
   mode: RunnerMode
   progress: { current: number; total: number }
   collapsed: boolean
+  claims: Claim[]
+  apiOnline: boolean
+  apiError: string | null
   onToggle: () => void
   onShapeChange: (s: ShapeId) => void
   onClaimChange: (id: string) => void
@@ -28,6 +31,9 @@ export function ControlPanel({
   mode,
   progress,
   collapsed,
+  claims,
+  apiOnline,
+  apiError,
   onToggle,
   onShapeChange,
   onClaimChange,
@@ -60,8 +66,11 @@ export function ControlPanel({
             <header className="brand-block">
               <span className="eyebrow">LogiX-VN · Lab 8</span>
               <h1>Claim Flow</h1>
-              <p className="lede">Quan sát luồng xử lý ticket theo từng kiến trúc.</p>
-              <span className="sim-chip">Simulation</span>
+              <p className="lede">Chạy thật `run_claim` qua API Python — canvas replay theo trace.</p>
+              <span className={apiOnline ? 'live-chip' : 'sim-chip'}>
+                {apiOnline ? 'LIVE · lab8.web_api' : 'API offline'}
+              </span>
+              {apiError && <p className="api-error">{apiError}</p>}
             </header>
 
             <section className="stack-md">
@@ -90,7 +99,7 @@ export function ControlPanel({
                   disabled={busy}
                   onChange={(e) => onClaimChange(e.target.value)}
                 >
-                  {CLAIMS.map((c) => (
+                  {claims.map((c) => (
                     <option key={c.claim_id} value={c.claim_id}>
                       {c.claim_id} · {c.matrix_id} · {c.expected.status}
                     </option>
@@ -137,8 +146,13 @@ export function ControlPanel({
 
               <div className="run-actions">
                 {mode !== 'running' && mode !== 'paused' && (
-                  <button type="button" className="btn btn-primary" onClick={onRun}>
-                    <span>Run ticket</span>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={onRun}
+                    disabled={!apiOnline}
+                  >
+                    <span>Run live</span>
                     <span className="btn-nest">
                       <IconPlay />
                     </span>

@@ -29,7 +29,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Đào Đức Duy (vai trò 1 và 6) | T001/T003 điều phối; T012/T013 benchmark/report; T015 B7 audit | `deac9b2` (T003), `c800c85` (T013), `aab41c1` (B7) | `src/tests/test_bonus_grader_audit.py` (được thêm trong `aab41c1`); T003/T013 chủ yếu là điều phối/report |
+| Đào Đức Duy | T001/T003 điều phối; T012/T013 benchmark/report; T015 B7 audit | `deac9b2` (T003), `c800c85` (T013), `aab41c1` (B7) | `src/tests/test_bonus_grader_audit.py` (được thêm trong `aab41c1`); T003/T013 chủ yếu là điều phối/report |
 | Bùi Ngọc Hùng | Workflow T004/T005 | `a81d469` | `src/tests/test_workflow_shape.py` (được thêm trong commit) |
 | Nguyễn Minh Nhân | Single-agent T006/T007 | `303976a` | Không tìm thấy test file/commit do tác giả này thêm/sửa trong lịch sử hiện có |
 | Trần Cảnh Hưng | Orchestrator T008/T009 | `d4e1899` | `src/tests/test_orchestrator_shape.py` (được thêm trong commit) |

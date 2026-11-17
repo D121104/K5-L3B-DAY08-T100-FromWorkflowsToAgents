@@ -20,6 +20,8 @@ src/reports/bonus_hidden.json
 
 # Instructor-only hidden pack. Never push it to this repo.
 src/eval/instructor/
+src/eval/hidden_claims.jsonl
+src/eval/hidden_world_state.json
 
 # Local demo cheat sheet (do not commit)
 DEMO_BENCHMARK_NOTES.md

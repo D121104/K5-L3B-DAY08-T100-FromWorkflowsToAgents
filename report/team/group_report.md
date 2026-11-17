@@ -1,13 +1,10 @@
 # Báo cáo nhóm — Lab 8 LogiX-VN
 
-Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/reports/`, không chép tay từ terminal.
-
 ## 1. Thông tin nhóm
 
-- Tên nhóm: Chưa được cung cấp; cần điền trước khi nộp.
-- Thành viên: xem `TEAM.md`; phân công có sáu vai trò nhưng Đào Đức Duy (2A202603900) được ghi cho cả vai trò trưởng nhóm/Thành viên 1 và benchmark/report/Thành viên 6, nên hiện có năm người khác nhau trong danh sách. Có năm báo cáo cá nhân theo năm MSSV duy nhất.
-- Commit chốt: mã nguồn được benchmark ở `f176005`; cần chạy lại benchmark và cập nhật hash sau khi chốt/commit report theo `SUBMISSION.md`.
-- Lưu ý: thư mục workspace có tên lớp `L3B`, trong khi `SUBMISSION.md` hiện quy định repo nộp `L3A`; nhóm cần xác minh đúng lớp/tên repo, không tự đổi theo suy đoán.
+- Tên nhóm: T100
+- Thành viên: xem `TEAM.md`;
+- Commit mã nguồn được benchmark: `f176005`; commit báo cáo T013: `c800c85`; commit audit B7: `aab41c1`. Commit  chốt report: "finish lab day 08"
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -15,8 +12,8 @@ Nhóm triển khai ba shape A/B/C để xử lý cùng contract và so sánh v�
 Theo bảng phân công, Hùng phụ trách workflow, Nhân phụ trách single-agent, Hưng phụ trách
 orchestrator; vai trò tích hợp, kiểm thử và benchmark/report được giao cho các thành viên còn
 lại. Nền tảng/contract được chốt trước khi ba shape làm song song; benchmark chạy sau khi tích
-hợp. Tên/MSSV chính thức và đóng góp được xác minh của các thành viên còn lại cần điền từ
-TEAM.md/nhóm.
+hợp. Nhóm chọn thêm bonus B7, kiểm toán ba candidate grader bằng các quan hệ metamorphic; chi
+tiết thành viên và commit được liệt kê trong `TEAM.md`.
 
 ## 3. Giải pháp
 
@@ -38,31 +35,61 @@ Benchmark do `lab8.benchmark` sinh, 14 claim × 5 seed = 70 trial mỗi shape:
 | orchestrator | 1.000 (70/70) | 1.000 | 1.000–1.000 | 0.000000 | 46.43 | 2.79 / 3 |
 | swarm | 0.986 (69/70) | 0.929 | 0.929–1.000 | 0.000816 | 49.57 | 2.80 / 3 |
 
-Crash report hiện có `20/20`. Swarm có một trial lỗi `status resolved != denied` ở seed 55. Hidden self-check/hidden grade chưa có. Giá là mô phỏng, không phải API bill; latency unavailable. Người dùng xác nhận đã chạy lại benchmark bằng `.venv`; output/version chính xác chưa được lưu trong phiên này.
+Crash report hiện có `20/20`. Swarm có một trial lỗi `status resolved != denied` ở seed 55. Giá là mô phỏng, không phải API bill; latency unavailable. Người dùng xác nhận đã chạy lại benchmark bằng `.venv`; output/version chính xác chưa được lưu trong phiên này.
+
+### Bonus B7 và kiểm tra hidden cục bộ
+
+Các test B7 so sánh ba candidate grader. Không candidate nào đạt mọi quan hệ: grader_a đếm cost
+sai, grader_b và grader_c sai `pass_5` khi lặp trials, còn grader_c đưa trial lỗi hạ tầng vào
+mẫu số pass rate. Quan hệ mới thêm một trial thất bại để kiểm tra cost chỉ được tính một lần.
+B7 tests pass 5/5.
+
+| Gate/check | Kết quả tổng hợp |
+|---|---:|
+| Student matrix trên các shape | 248 passed |
+| Pytest mặc định, gồm test B7 | 179 passed, 248 deselected |
+| Crash safety | 20/20 |
+| Hidden self-check workflow | 200 trial (40 claim × 5 seed); trace hợp lệ 200/200 |
+| CANARY marker trong artifacts đã scan | 0 |
+| Trial `resolved` trong 45 lượt của claim có approval không hợp lệ | 0 |
+| Submission checker | 0 FAIL, 1 WARN do thay đổi chưa commit |
+
+Hidden claims/world chỉ cung cấp input, không có expected labels. Vì vậy benchmark chạy self-check
+chứ không chấm hidden pass rate; kết quả này không thay thế grader chính thức.
 
 Quyết định kiến trúc và lý do: xem `report/team/decision_adr.md`. Phiếu nghiên cứu và ablation: xem `report/team/research_card.md`.
 
 ## 5. Khó khăn và cách xử lý
 
-Interpreter của agent không có `python` trên PATH; benchmark ban đầu được chạy bằng `python3`.
-Người dùng sau đó xác nhận đã chạy lại trong `.venv`, theo dải Python được tài liệu hỗ trợ.
-Output console và phiên bản cụ thể chưa được lưu trong workspace. Hidden report chưa được cung
-cấp.
+Thách thức chính là giữ ba shape tuân thủ cùng contract nhưng không để model tự quyết định số tiền
+hoặc ghi refund. Nhóm giữ quyền kiểm tra approval, giới hạn theo đơn và ghi ledger tại host; các
+shape chỉ tính quote rồi gửi yêu cầu qua host. Regression tests bao phủ approval thiếu/hết hạn/sai
+claim, retry và crash/resume.
+
+Với orchestrator, việc chia sẻ đủ dữ kiện cho investigator mà không chuyển secret/PII đòi hỏi
+handoff theo allowlist và tool chỉ đọc; trace được kiểm tra riêng để phát hiện marker nhạy cảm.
+Trong benchmark, nhóm cố định public claims/seeds và dùng SQLite riêng cho từng trial để kết quả
+giữa các shape có thể so sánh và tái lập.
+
+Giới hạn còn lại: hidden pack hiện chỉ có claims/world, không có expected labels hoặc grader riêng.
+Nhóm đã chạy self-check aggregate về trace/leak và approval, nhưng chưa thể tính hidden pass rate
+chính thức; không suy diễn kết quả này thành việc đã qua hidden gate.
 
 ## 6. Tổng hợp đóng góp
 
 Chi tiết đóng góp, commits, tests và report evidence được liệt kê trong `TEAM.md` và các báo cáo
-cá nhân. Git history xác nhận test mới trong commit workflow `a81d469` và orchestrator `d4e1899`;
-commit single-agent `303976a`, T003 `deac9b2` và crash report `42c8cf2` không chứa test mới. Do đó
-chưa đủ bằng chứng để xác nhận mọi thành viên có test riêng trong lịch sử branch. Các thành viên
-cần bổ sung hoặc xác nhận bằng chứng trước khi nộp; không gán nhầm test hay commit.
+cá nhân. Git history và báo cáo cá nhân xác nhận test shape trong commit workflow `a81d469`,
+orchestrator `d4e1899`, test tích hợp của Quốc `88b6ba3` và B7 của Duy `aab41c1`. Báo cáo của
+Nhân ghi chưa có test riêng cho Shape B được xác nhận trong lịch sử Git; không gán test của người
+khác cho Nhân.
 
 ## 7. Hạn chế và hướng cải thiện
 
 MockLLM không phải model sản xuất; latency `unavailable`; bộ public chỉ có 14 claim; chi phí VND
-là mô phỏng. Kết quả công khai không thay thế hidden grade trên 40 claim × 5 seed và không chứng
-minh workflow sẽ đạt ngưỡng hidden 0.75/must-pass. Kết luận đổi nếu hidden cho thấy workflow
-không đạt cổng, hoặc benchmark tái lập trên Python được hỗ trợ cho kết quả khác.
+là mô phỏng. Hidden self-check hiện chỉ xác nhận contract trace/CANARY và approval aggregate;
+không có expected labels/grader để tính hidden pass rate hay xác nhận chính thức ngưỡng ≥ 0.80
+và toàn bộ must-pass. T015 vì vậy chưa đủ điều kiện đóng; quyết định workflow cần được xem xét
+lại nếu grader chính thức hoặc benchmark tái lập cho kết quả khác.
 
 ## 8. Tài liệu tham khảo
 

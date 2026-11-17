@@ -113,7 +113,7 @@ Mỗi công việc dùng định dạng `- [ ] Tnnn [P?] [USn?] ...`. Mô tả b
 
 **Kiểm thử độc lập**: Chủ đề được chọn có code/test/report/bằng chứng bắt buộc; kiểm thử nền tảng vẫn xanh; thỏa tất cả điều kiện must-pass và hidden pass rate `>= 0.80`.
 
-- [ ] T015 [US5] Phụ trách: Thành viên 6. Yêu cầu: O-01. Đầu ra: nhóm đã chọn B7; tạo kiểm thử metamorphic, báo cáo kết quả và report bonus theo `docs/bonus_topics.md`. Nghiệm thu: `src/tests/test_bonus_grader_audit.py` pass; report JSON do test sinh và `report/team/bonus_report.md` có phân tích candidate; phải qua các gate bắt buộc trước khi bonus được tính. File: `src/tests/test_bonus_grader_audit.py`, `src/reports/bonus_grader_audit.json`, `report/team/bonus_report.md`. Phụ thuộc: T014 và xác minh gate bonus.
+- [ ] T015 [US5] Phụ trách: Thành viên 6. Yêu cầu: O-01. Đầu ra: nhóm đã chọn B7; tạo kiểm thử metamorphic, báo cáo kết quả và report bonus theo `docs/bonus_topics.md`. Nghiệm thu: `src/tests/test_bonus_grader_audit.py` pass; report JSON do test sinh và `report/team/bonus_report.md` có phân tích candidate; phải qua các gate bắt buộc trước khi bonus được tính. File: `src/tests/test_bonus_grader_audit.py`, `src/reports/bonus_grader_audit.json`, `report/team/bonus_report.md`. Phụ thuộc: T014 và xác minh gate bonus. B7 tests 5/5, student matrix 248 passed, pytest 179 passed và hidden local self-check đã được ghi aggregate; vẫn chưa đóng vì hidden pack không có expected labels/grader và chưa xác minh được hidden pass rate ≥ 0.80.
 
 ---
 

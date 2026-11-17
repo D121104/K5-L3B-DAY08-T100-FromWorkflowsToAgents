@@ -27,9 +27,7 @@ không đạt hidden pass rate 0.75 hoặc vi phạm must-pass, nhóm phải đ�
 
 Trên public corpus này, multi-agent không tăng pass rate so với workflow. Orchestrator dùng ít
 event hơn trung bình (2.79 so với 4.43) nhưng cost/success cao hơn. Số event không phải latency;
-latency được ghi `unavailable`, do đó không kết luận multi-agent nhanh/chậm hơn. Nhóm chỉ nên
-đổi lựa chọn nếu hidden evaluation hoặc một benchmark được kiểm soát cho thấy shape khác vượt
-workflow mà vẫn qua toàn bộ safety gate.
+latency được ghi `unavailable`, do đó không kết luận multi-agent nhanh/chậm hơn.
 
 ## Trace và bằng chứng
 
@@ -42,7 +40,4 @@ hidden chính thức hiện chưa có.
 ## Giới hạn
 
 MockLLM không phải model sản xuất; giá là mô phỏng và latency `unavailable`. Public set chỉ có
-14 claim. Người dùng xác nhận đã chạy lại benchmark trong `.venv`; phiên bản Python và output
-console lần chạy lại chưa được lưu trong phiên này. Hidden grade không có trong repository nên
-lựa chọn workflow chỉ dựa trên public data, không phải khẳng định đã qua hidden gate. Không sửa
-JSON bằng tay để đạt ngưỡng.
+14 claim. 
